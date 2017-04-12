@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/cn.zhouzy.greatcate"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_bg"
+    tools:context="cn.zhouzy.greatcate.main.activity.MainActivity" >
+
+    <cn.zhouzy.greatcate.common.view.NoScrollViewPager
+        android:id="@+id/viewpager_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rippleview_main_bottom" >
+    </cn.zhouzy.greatcate.common.view.NoScrollViewPager>
+
+    <cn.zhouzy.greatcate.common.view.RippleView
+        android:id="@+id/rippleview_main_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:rv_color="@color/LightGrey" >
+
+        <RadioGroup
+            android:id="@+id/rg_main_bottom_radiogroup"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_94dp"
+            android:background="@color/white_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/rb_main_cate"
+                style="@style/rb_checked_style"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checked="true"
+                android:drawableTop="@drawable/rb_cook_selector"
+                android:text="@string/text_display" />
+
+            <RadioButton
+                android:id="@+id/rb_main_humor"
+                style="@style/rb_checked_style"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/rb_humor_normal"
+                android:text="@string/text_humor" />
+
+            <RadioButton
+                android:id="@+id/rb_main_mine"
+                style="@style/rb_checked_style"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/rb_mine_selector"
+                android:text="@string/text_mine" />
+        </RadioGroup>
+    </cn.zhouzy.greatcate.common.view.RippleView>
+
+</RelativeLayout>
