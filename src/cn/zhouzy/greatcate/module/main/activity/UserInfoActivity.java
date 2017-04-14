@@ -2,9 +2,15 @@ package cn.zhouzy.greatcate.module.main.activity;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -15,6 +21,7 @@ import cn.bmob.v3.BmobUser;
 import cn.zhouzy.greatcate.R;
 import cn.zhouzy.greatcate.base.BaseActivity;
 import cn.zhouzy.greatcate.base.BaseDialogFragment;
+import cn.zhouzy.greatcate.common.constant.Constant;
 import cn.zhouzy.greatcate.common.utils.DialogUtil;
 import cn.zhouzy.greatcate.common.utils.StrUtil;
 import cn.zhouzy.greatcate.common.utils.ToastUtil;
@@ -46,6 +53,7 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 	private User mUser;
 	private UserInfoContract.IUserInfoPresenter mUserInfoPresenter;
 	private BaseDialogFragment mDialog;
+	private Uri mHeadProtraitUri;
 
 	@Override
 	protected void onCreate(Bundle arg0)
@@ -165,10 +173,9 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 	}
 
 	@OnClick(
-	{ R.id.rl_user_info_account_container, R.id.rl_user_info_email_container,
-			R.id.rl_user_info_headportrait_container, R.id.rl_user_info_nickname_container,
-			R.id.rl_user_info_profile_container, R.id.rl_user_info_qq_container,
-			R.id.rl_user_info_wechat_container, R.id.rl_user_info_weibo_container, R.id.btn_back })
+	{ R.id.rl_user_info_account_container, R.id.rl_user_info_email_container, R.id.rl_user_info_headportrait_container,
+	        R.id.rl_user_info_nickname_container, R.id.rl_user_info_profile_container, R.id.rl_user_info_qq_container,
+	        R.id.rl_user_info_wechat_container, R.id.rl_user_info_weibo_container, R.id.btn_back })
 	void OnClick(View v)
 	{
 		switch (v.getId())
@@ -183,10 +190,46 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 		case R.id.rl_user_info_profile_container:
 			modifyProfile();
 			break;
+		case R.id.rl_user_info_headportrait_container:
+			modifyHeadProtrait();
+			break;
 
 		default:
 			break;
 		}
+	}
+
+	private void modifyHeadProtrait()
+	{
+		new AlertDialog.Builder(this).setItems(new String[]
+		{ getResources().getString(R.string.by_take_photo), getResources().getString(R.string.by_gallery) },
+		        new DialogInterface.OnClickListener()
+		        {
+
+			        @Override
+			        public void onClick(DialogInterface dialog, int which)
+			        {
+				        switch (which)
+				        {
+				        // 拍照
+				        case 0:
+					        Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					        ContentValues values = new ContentValues();
+					        mHeadProtraitUri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
+					        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mHeadProtraitUri);
+					        startActivityForResult(captureIntent, Constant.REQUSET_CODE_CAPTURE);
+					        break;
+				        // 从图库中选取
+				        case 1:
+					        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+					        galleryIntent.setType("image/*");
+					        startActivityForResult(galleryIntent, Constant.REQUSET_CODE_GALLERY);
+					        break;
+				        default:
+					        break;
+				        }
+			        }
+		        }).show();
 	}
 
 	private void modifyProfile()
@@ -205,7 +248,7 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 						String profile = mDialog.getEditTextMsg();
 						String objectId = mUser.getObjectId();
 						mUserInfoPresenter.modifyProfile(profile, objectId);
-
+						DialogUtil.showLoadDialog(UserInfoActivity.this, R.drawable.xsearch_loading, "修改中");
 					}
 
 				}
@@ -228,6 +271,7 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 					{
 						String nickname = mDialog.getEditTextMsg();
 						String objectId = mUser.getObjectId();
+						DialogUtil.showLoadDialog(UserInfoActivity.this, R.drawable.xsearch_loading, "修改中");
 						mUserInfoPresenter.modifyNickname(nickname, objectId);
 
 					}
@@ -235,6 +279,47 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 				}
 			}, getResources().getString(R.string.modify_nickname), hintMsg);
 		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode != RESULT_CANCELED)
+		{
+			switch (requestCode)
+			{
+			case Constant.REQUSET_CODE_CAPTURE:
+				startPhotoZoom(mHeadProtraitUri);
+				break;
+			case Constant.REQUSET_CODE_GALLERY:
+				startPhotoZoom(data.getData());
+				break;
+			default:
+				break;
+			}
+
+		}
+	}
+	
+	/**
+	 * 裁剪图片方法实现
+	 * 
+	 * @param uri
+	 */
+	public void startPhotoZoom(Uri uri) {
+		Intent intent = new Intent("com.android.camera.action.CROP");
+		intent.setDataAndType(uri, "image/*");
+		// 设置裁剪
+		intent.putExtra("crop", "true");
+		// aspectX aspectY 是宽高的比例
+		intent.putExtra("aspectX", 1);
+		intent.putExtra("aspectY", 1);
+		// outputX outputY 是裁剪图片宽高
+		intent.putExtra("outputX", 300);
+		intent.putExtra("outputY", 300);
+		intent.putExtra("return-data", true);
+		startActivityForResult(intent, 2);
 	}
 
 	@Override
@@ -253,12 +338,14 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 	public void onModifySuccessed()
 	{
 		refresh();
+		DialogUtil.removeDialog(this);
 	}
 
 	@Override
 	public void onModifyErrored(String errorMsg)
 	{
 		ToastUtil.showToast(this, errorMsg);
+		DialogUtil.removeDialog(this);
 	}
 
 }

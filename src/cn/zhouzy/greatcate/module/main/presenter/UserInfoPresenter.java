@@ -59,7 +59,7 @@ public class UserInfoPresenter implements UserInfoContract.IUserInfoPresenter
 	}
 
 	@Override
-	public void modifyHeadProtrait(Bitmap headProtrait, String objectId)
+	public void modifyHeadProtrait(String headProtrait, String objectId)
 	{
 
 	}

@@ -11,7 +11,7 @@ public interface UserInfoContract
 
 		void modifyProfile(String profile, String objectId);
 
-		void modifyHeadProtrait(Bitmap headProtrait, String objectId);
+		void modifyHeadProtrait(String headProtrait, String objectId);
 
 	}
 
@@ -21,7 +21,7 @@ public interface UserInfoContract
 
 		void modifyProfile(String profile, String objectId, CommonCallback callback);
 
-		void modifyHeadProtrait(Bitmap headProtrait, String objectId, CommonCallback callback);
+		void modifyHeadProtrait(String headProtrait, String objectId, CommonCallback callback);
 	}
 
 	interface IUserInfoView

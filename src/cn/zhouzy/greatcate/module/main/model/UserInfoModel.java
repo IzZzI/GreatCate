@@ -1,6 +1,5 @@
 package cn.zhouzy.greatcate.module.main.model;
 
-import android.graphics.Bitmap;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.zhouzy.greatcate.common.callback.CommonCallback;
@@ -56,7 +55,7 @@ public class UserInfoModel implements UserInfoContract.IUserInfoModel
 	}
 
 	@Override
-	public void modifyHeadProtrait(Bitmap headProtrait, String objectId, CommonCallback callback)
+	public void modifyHeadProtrait(String headProtrait, String objectId, CommonCallback callback)
 	{
 
 	}

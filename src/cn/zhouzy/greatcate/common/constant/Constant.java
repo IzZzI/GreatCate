@@ -17,4 +17,8 @@ public class Constant
 	public static final int REQUESTCODE_LOGIN = 1;
 	public static final int REQUESTCODE_SETTING = 2;
 	public static final int REQUESTCODE_USERINFO = 3;
+	//裁剪图片
+	public static final int REQUSET_CODE_CAPTURE = 4;
+	//系统图库
+	public static final int REQUSET_CODE_GALLERY = 5;
 }

@@ -75,4 +75,6 @@
     <string name="confirm">confirm</string>
     <string name="modify_nickname">修改昵称</string>
     <string name="modify_profile">修改个人简介</string>
+    <string name="by_take_photo">拍照</string>
+    <string name="by_gallery">从图库中选取</string>
 </resources>
