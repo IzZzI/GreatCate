@@ -32,8 +32,8 @@ public class SearchActivity extends BaseActivity
 	}
 
 	@OnClick(
-	{ R.id.btn_search_back, R.id.tv_item_search_hot_1, R.id.tv_item_search_hot_2,
-			R.id.tv_item_search_hot_3 })
+	{ R.id.btn_search_back, R.id.tv_search_hot_1, R.id.tv_search_hot_2
+			R.id.tv_search_hot_3,R.id.btn_search_query })
 	void OnClick(View v)
 	{
 		switch (v.getId())
@@ -41,11 +41,19 @@ public class SearchActivity extends BaseActivity
 		case R.id.btn_search_back:
 			finish();
 			break;
+		case R.id.btn_search_query:
+			query();
+			break;
 
 		default:
 			break;
 		}
 
+	}
+
+	private void query()
+	{
+		
 	}
 
 }
