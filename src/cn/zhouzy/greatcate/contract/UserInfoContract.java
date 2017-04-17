@@ -1,6 +1,5 @@
 package cn.zhouzy.greatcate.contract;
 
-import android.graphics.Bitmap;
 import cn.zhouzy.greatcate.common.callback.CommonCallback;
 
 public interface UserInfoContract
@@ -11,7 +10,7 @@ public interface UserInfoContract
 
 		void modifyProfile(String profile, String objectId);
 
-		void modifyHeadProtrait(String headProtrait, String objectId);
+		void modifyHeadProtrait(String headprotraitPath, String objectId,String nowIcon);
 
 	}
 
@@ -21,7 +20,7 @@ public interface UserInfoContract
 
 		void modifyProfile(String profile, String objectId, CommonCallback callback);
 
-		void modifyHeadProtrait(String headProtrait, String objectId, CommonCallback callback);
+		void modifyHeadProtrait(String headProtraitPath, String objectId,String nowIcon ,CommonCallback callback);
 	}
 
 	interface IUserInfoView

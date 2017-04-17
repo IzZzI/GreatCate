@@ -14,9 +14,13 @@ public interface DisplayApi
 {
 
 	@GET("index")
-	Observable<Root> getCateList(@Query("cid") int cid, @Query("pn") String pn,
-			@Query("rn") String rn, @Query("key") String key);
+	Observable<Root> getCateList(@Query("cid") int cid, @Query("pn") String pn, @Query("rn") String rn,
+	        @Query("key") String key);
 
 	@GET("queryid")
 	Observable<Root> getCateDetailsById(@Query("id") int id, @Query("key") String key);
+
+	@GET("query")
+	Observable<Root> searchByMenu(@Query("menu") String menu, @Query("pn") String pn, @Query("rn") String rn,
+	        @Query("key") String key);
 }

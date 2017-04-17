@@ -7,10 +7,10 @@
     <ImageView
         android:id="@+id/iv_include_display_head_view_bgimageview"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_400dp"
+        android:layout_height="@dimen/dimen_500dp"
         android:contentDescription="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/watch_dish_bg" />
+        android:src="@drawable/bg_header" />
 
     <cn.zhouzy.greatcate.common.view.ExpandGridViewToScrollView
         android:id="@+id/gv_include_display_head_view_category"

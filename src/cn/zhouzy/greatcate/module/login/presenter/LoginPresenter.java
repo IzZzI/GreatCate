@@ -4,6 +4,7 @@ import cn.zhouzy.greatcate.common.callback.CommonCallback;
 import cn.zhouzy.greatcate.contract.LoginContract;
 import cn.zhouzy.greatcate.contract.LoginContract.ILoginVew;
 import cn.zhouzy.greatcate.module.login.model.LoginModel;
+import cn.zhouzy.greatcate.module.login.view.ThridPartyLoginCallBack;
 
 public class LoginPresenter implements LoginContract.ILoginPresenter
 {
@@ -40,19 +41,25 @@ public class LoginPresenter implements LoginContract.ILoginPresenter
 	@Override
 	public void thirdPartyLogin(String name)
 	{
-		mLoginModel.thirdPartyLogin(name, new CommonCallback()
+		mLoginModel.thirdPartyLogin(name, new ThridPartyLoginCallBack()
 		{
 
 			@Override
-			public void onSuccess(Object success)
+			public void onSuccessed()
 			{
-				mLoginView.onLoginSuccessed(success);
+				mLoginView.onLoginSuccessed(null);
 			}
 
 			@Override
-			public void onFail(Object fail)
+			public void onError(String errorMsg)
 			{
-				mLoginView.onLoginFailed((String) fail);
+				mLoginView.onLoginFailed(errorMsg);
+			}
+
+			@Override
+			public void onCancle()
+			{
+				mLoginView.onThirdPartyLoginCancle();
 			}
 		});
 	}

@@ -1,14 +1,18 @@
 package cn.zhouzy.greatcate.module.main.activity;
 
+import java.io.File;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.view.KeyEvent;
@@ -23,6 +27,7 @@ import cn.zhouzy.greatcate.base.BaseActivity;
 import cn.zhouzy.greatcate.base.BaseDialogFragment;
 import cn.zhouzy.greatcate.common.constant.Constant;
 import cn.zhouzy.greatcate.common.utils.DialogUtil;
+import cn.zhouzy.greatcate.common.utils.FileUtil;
 import cn.zhouzy.greatcate.common.utils.StrUtil;
 import cn.zhouzy.greatcate.common.utils.ToastUtil;
 import cn.zhouzy.greatcate.common.view.CircleImageView;
@@ -217,13 +222,13 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 					        ContentValues values = new ContentValues();
 					        mHeadProtraitUri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, values);
 					        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mHeadProtraitUri);
-					        startActivityForResult(captureIntent, Constant.REQUSET_CODE_CAPTURE);
+					        startActivityForResult(captureIntent, Constant.REQUEST_CODE_CAPTURE);
 					        break;
 				        // 从图库中选取
 				        case 1:
 					        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
 					        galleryIntent.setType("image/*");
-					        startActivityForResult(galleryIntent, Constant.REQUSET_CODE_GALLERY);
+					        startActivityForResult(galleryIntent, Constant.REQUEST_CODE_GALLERY);
 					        break;
 				        default:
 					        break;
@@ -289,11 +294,20 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 		{
 			switch (requestCode)
 			{
-			case Constant.REQUSET_CODE_CAPTURE:
+			case Constant.REQUEST_CODE_CAPTURE:
 				startPhotoZoom(mHeadProtraitUri);
 				break;
-			case Constant.REQUSET_CODE_GALLERY:
-				startPhotoZoom(data.getData());
+			case Constant.REQUEST_CODE_GALLERY:
+				if (data != null)
+				{
+					startPhotoZoom(data.getData());
+				} else
+				{
+					ToastUtil.showToast(this, getResources().getString(R.string.operation_error));
+				}
+				break;
+			case Constant.REQUEST_CODE_CROP:
+				saveCropBitmapAndUpLoad(data);
 				break;
 			default:
 				break;
@@ -301,13 +315,48 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 
 		}
 	}
-	
+
+	private void saveCropBitmapAndUpLoad(Intent data)
+	{
+		if (data != null)
+		{
+			Bundle extras = data.getExtras();
+			if (extras != null)
+			{
+				Bitmap bitmap = extras.getParcelable("data");
+				if (FileUtil.IsExistSdCard())
+				{
+					String path = Environment.getExternalStorageDirectory() + File.separator + Constant.DIR_GREATCATE
+					        + File.separator + Constant.FILE_NAME_HEADPROTRAIT;
+					if (FileUtil.writeBitmapToSD(path, bitmap))
+					{
+						DialogUtil.showLoadDialog(UserInfoActivity.this, R.drawable.xsearch_loading, "修改中");
+						mUserInfoPresenter.modifyHeadProtrait(path, mUser.getObjectId(), mUser.getIcon());
+					} else
+					{
+						ToastUtil.showToast(this, getResources().getString(R.string.operation_error));
+					}
+				} else
+				{
+					ToastUtil.showToast(this, getResources().getString(R.string.cannot_find_sd));
+				}
+			} else
+			{
+				ToastUtil.showToast(this, getResources().getString(R.string.operation_error));
+			}
+		} else
+		{
+			ToastUtil.showToast(this, getResources().getString(R.string.operation_error));
+		}
+	}
+
 	/**
 	 * 裁剪图片方法实现
 	 * 
 	 * @param uri
 	 */
-	public void startPhotoZoom(Uri uri) {
+	public void startPhotoZoom(Uri uri)
+	{
 		Intent intent = new Intent("com.android.camera.action.CROP");
 		intent.setDataAndType(uri, "image/*");
 		// 设置裁剪
@@ -319,7 +368,7 @@ public class UserInfoActivity extends BaseActivity implements UserInfoContract.I
 		intent.putExtra("outputX", 300);
 		intent.putExtra("outputY", 300);
 		intent.putExtra("return-data", true);
-		startActivityForResult(intent, 2);
+		startActivityForResult(intent, Constant.REQUEST_CODE_CROP);
 	}
 
 	@Override

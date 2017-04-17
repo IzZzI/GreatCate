@@ -22,6 +22,7 @@ import butterknife.OnClick;
 import cn.zhouzy.greatcate.R;
 import cn.zhouzy.greatcate.base.BaseFragment;
 import cn.zhouzy.greatcate.common.constant.Constant;
+import cn.zhouzy.greatcate.common.utils.DialogUtil;
 import cn.zhouzy.greatcate.common.utils.ToastUtil;
 import cn.zhouzy.greatcate.common.view.ExpandGridViewToScrollView;
 import cn.zhouzy.greatcate.contract.DisplayContract;
@@ -57,8 +58,7 @@ public class DisplayFragment extends BaseFragment implements DisplayContract.IDi
 	private CategoryGridViewAdapter mCategoryGridViewAdapter;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState)
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		setContentView(inflater, container, R.layout.fragment_display);
 		initView();
@@ -120,7 +120,9 @@ public class DisplayFragment extends BaseFragment implements DisplayContract.IDi
 	private void initData()
 	{
 		mDisplayPresenter = new DisplayPresenter(this);
-		// mDisplayPresenter.getCateList(mCid, mPn + "", mRn + "");
+//		DialogUtil.showLoadDialog(getActivity(), R.drawable.xsearch_loading,
+//		        getResources().getString(R.string.loading));
+//		mDisplayPresenter.getCateList(mCid, mPn + "", mRn + "");
 	}
 
 	private void initView()
@@ -130,16 +132,14 @@ public class DisplayFragment extends BaseFragment implements DisplayContract.IDi
 		mCateAdapter = new DisplayCateListViewAdapter(mCateList, getActivity());
 		mCateListView.setAdapter(mCateAdapter);
 		// 初始化HeadView并添加到GridView头部
-		mHeadView = LayoutInflater.from(getActivity()).inflate(R.layout.include_display_head_view,
-				null, false);
+		mHeadView = LayoutInflater.from(getActivity()).inflate(R.layout.include_display_head_view, null, false);
 		// 取得头部分类GridView
-		mHeaderCategoryGridView = (ExpandGridViewToScrollView) mHeadView.findViewById(
-				R.id.gv_include_display_head_view_category);
+		mHeaderCategoryGridView = (ExpandGridViewToScrollView) mHeadView
+		        .findViewById(R.id.gv_include_display_head_view_category);
 		mCategoryGridViewAdapter = new CategoryGridViewAdapter(getActivity());
 		mHeaderCategoryGridView.setAdapter(mCategoryGridViewAdapter);
 		// 取得头部背景图片
-		mHeaderBgImageView = (ImageView) mHeadView.findViewById(
-				R.id.iv_include_display_head_view_bgimageview);
+		mHeaderBgImageView = (ImageView) mHeadView.findViewById(R.id.iv_include_display_head_view_bgimageview);
 		mCateListView.addHeaderView(mHeadView);
 	}
 
@@ -172,8 +172,7 @@ public class DisplayFragment extends BaseFragment implements DisplayContract.IDi
 			}
 
 			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-					int totalItemCount)
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
 			{
 				changeTitleStatus();
 			}
@@ -193,6 +192,8 @@ public class DisplayFragment extends BaseFragment implements DisplayContract.IDi
 						mTitleTextView.setText(mTitle);
 					}
 				}
+				DialogUtil.showLoadDialog(getActivity(), R.drawable.xsearch_loading,
+		                getResources().getString(R.string.loading));
 				mDisplayPresenter.getCateList(mCid, mPn + "", mRn + "");
 
 			}
@@ -254,6 +255,7 @@ public class DisplayFragment extends BaseFragment implements DisplayContract.IDi
 		mCateList.clear();
 		mCateList.addAll(cateList);
 		mCateAdapter.notifyDataSetChanged();
+		DialogUtil.removeDialog(getActivity());
 	}
 
 	@Override

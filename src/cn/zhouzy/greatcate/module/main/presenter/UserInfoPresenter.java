@@ -1,6 +1,5 @@
 package cn.zhouzy.greatcate.module.main.presenter;
 
-import android.graphics.Bitmap;
 import cn.zhouzy.greatcate.common.callback.CommonCallback;
 import cn.zhouzy.greatcate.contract.UserInfoContract;
 import cn.zhouzy.greatcate.contract.UserInfoContract.IUserInfoView;
@@ -59,9 +58,23 @@ public class UserInfoPresenter implements UserInfoContract.IUserInfoPresenter
 	}
 
 	@Override
-	public void modifyHeadProtrait(String headProtrait, String objectId)
+	public void modifyHeadProtrait(String headProtraitPath, String objectId, String nowIcon)
 	{
+		mUserInfoModel.modifyHeadProtrait(headProtraitPath, objectId, nowIcon, new CommonCallback()
+		{
 
+			@Override
+			public void onSuccess(Object success)
+			{
+				mUserInfoView.onModifySuccessed();
+			}
+
+			@Override
+			public void onFail(Object fail)
+			{
+				mUserInfoView.onModifyErrored((String) fail);
+			}
+		});
 	}
 
 }

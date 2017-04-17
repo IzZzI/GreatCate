@@ -16,6 +16,7 @@ import cn.sharesdk.wechat.friends.Wechat;
 import cn.zhouzy.greatcate.R;
 import cn.zhouzy.greatcate.base.BaseActivity;
 import cn.zhouzy.greatcate.common.constant.Constant;
+import cn.zhouzy.greatcate.common.utils.DialogUtil;
 import cn.zhouzy.greatcate.common.utils.SharedPreferencesUtil;
 import cn.zhouzy.greatcate.common.utils.StrUtil;
 import cn.zhouzy.greatcate.common.utils.ToastUtil;
@@ -79,9 +80,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.ILoginV
 	}
 
 	@OnClick(
-	{ R.id.ll_login_third_party_qq, R.id.ll_login_third_party_wechat,
-			R.id.ll_login_third_party_sinaweibo, R.id.btn_login_register, R.id.btn_login_login,
-			R.id.btn_back })
+	{ R.id.ll_login_third_party_qq, R.id.ll_login_third_party_wechat, R.id.ll_login_third_party_sinaweibo,
+	        R.id.btn_login_register, R.id.btn_login_login, R.id.btn_back })
 	void OnClick(View v)
 	{
 		switch (v.getId())
@@ -169,6 +169,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.ILoginV
 		default:
 			break;
 		}
+		DialogUtil.showLoadDialog(this, R.drawable.xsearch_loading, getResources().getString(R.string.loading));
 		mLoginPresenter.thirdPartyLogin(name);
 
 	}
@@ -176,6 +177,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.ILoginV
 	@Override
 	public void onLoginSuccessed(Object object)
 	{
+		DialogUtil.removeDialog(this);
 		ToastUtil.showToast(this, getResources().getString(R.string.login_success));
 		mProgressGenerator.onSuccessed();
 		setResult(RESULT_OK);
@@ -186,6 +188,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.ILoginV
 	@Override
 	public void onLoginFailed(String errorMsg)
 	{
+		DialogUtil.removeDialog(this);
 		mProgressGenerator.onError();
 		ToastUtil.showToast(this, errorMsg);
 	}
@@ -212,6 +215,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.ILoginV
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public void onThirdPartyLoginCancle()
+	{
+		DialogUtil.removeDialog(this);
 	}
 
 }

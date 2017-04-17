@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
+
     <string name="app_name">GreatCate</string>
     <string name="home_cooking">家常菜</string>
     <string name="cate_details">菜谱详情</string>
@@ -77,4 +78,8 @@
     <string name="modify_profile">修改个人简介</string>
     <string name="by_take_photo">拍照</string>
     <string name="by_gallery">从图库中选取</string>
+    <string name="operation_error">操作失败</string>
+    <string name="cannot_find_sd">sd卡状态异常</string>
+    <string name="loading">正在加载</string>
+
 </resources>

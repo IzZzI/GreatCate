@@ -16,6 +16,7 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.zhouzy.greatcate.common.callback.CommonCallback;
 import cn.zhouzy.greatcate.contract.LoginContract;
 import cn.zhouzy.greatcate.entity.User;
+import cn.zhouzy.greatcate.module.login.view.ThridPartyLoginCallBack;
 
 public class LoginModel implements LoginContract.ILoginModel
 {
@@ -41,7 +42,7 @@ public class LoginModel implements LoginContract.ILoginModel
 	}
 
 	@Override
-	public void thirdPartyLogin(String name, final CommonCallback callback)
+	public void thirdPartyLogin(String name, final ThridPartyLoginCallBack callback)
 	{
 		Platform platform = ShareSDK.getPlatform(name);
 		if (platform != null)
@@ -62,7 +63,7 @@ public class LoginModel implements LoginContract.ILoginModel
 					@Override
 					public void onError(Platform arg0, int arg1, Throwable arg2)
 					{
-						callback.onFail(arg2.getMessage());
+						callback.onError(arg2.getMessage());
 					}
 
 					@Override
@@ -81,7 +82,7 @@ public class LoginModel implements LoginContract.ILoginModel
 					@Override
 					public void onCancel(Platform arg0, int arg1)
 					{
-
+						callback.onCancle();
 					}
 				});
 				platform.authorize();
@@ -96,7 +97,7 @@ public class LoginModel implements LoginContract.ILoginModel
 	 * @param platformDb
 	 * @param callback
 	 */
-	private void loginByUserId(final PlatformDb platformDb, final CommonCallback callback)
+	private void loginByUserId(final PlatformDb platformDb, final ThridPartyLoginCallBack callback)
 	{
 		final String userId = platformDb.getUserId();
 		final String nickName = platformDb.getUserName();
@@ -129,10 +130,11 @@ public class LoginModel implements LoginContract.ILoginModel
 				                    {
 					                    if (arg1 == null)
 					                    {
-						                    callback.onSuccess(null);
+						                    callback.onSuccessed();
+						                    ;
 					                    } else
 					                    {
-						                    callback.onFail(arg1.getMessage());
+						                    callback.onError(arg1.getMessage());
 					                    }
 				                    }
 			                    });
@@ -153,7 +155,7 @@ public class LoginModel implements LoginContract.ILoginModel
 				                {
 					                if (arg1 == null)
 					                {
-						                callback.onSuccess(platformDb);
+						                callback.onSuccessed();
 					                }
 				                }
 			                });
@@ -161,7 +163,7 @@ public class LoginModel implements LoginContract.ILoginModel
 
 					} else
 					{
-						callback.onFail(e.getMessage());
+						callback.onError(e.getMessage());
 					}
 				}
 			});

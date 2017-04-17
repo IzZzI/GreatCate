@@ -33,8 +33,8 @@
 
             <cn.zhouzy.greatcate.common.view.CircleImageView
                 android:id="@+id/civ_mine_head_portrait"
-                android:layout_width="@dimen/dimen_160dp"
-                android:layout_height="@dimen/dimen_160dp"
+                android:layout_width="@dimen/dimen_180dp"
+                android:layout_height="@dimen/dimen_180dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/head_portrait" />
 
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_20dp"
                 android:text="@string/hint_login_or_register"
                 android:textColor="@color/white"
                 android:textSize="@dimen/txtsize_30sp" />

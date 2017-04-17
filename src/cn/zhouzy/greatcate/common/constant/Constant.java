@@ -13,12 +13,17 @@ public class Constant
 	public static String USER_INFO = "userinfo";
 	public static String SP_KEY_USERNAME = "username";
 	public static String SP_KEY_PASSWORD = "password";
+	public static String DIR_GREATCATE = "GreatCate";
+	public static String FILE_NAME_HEADPROTRAIT = "headprotrait.jpg";
+
 	public static final int REQUESTCODE_REGISTER = 0;
 	public static final int REQUESTCODE_LOGIN = 1;
 	public static final int REQUESTCODE_SETTING = 2;
 	public static final int REQUESTCODE_USERINFO = 3;
-	//裁剪图片
-	public static final int REQUSET_CODE_CAPTURE = 4;
+	//拍照
+	public static final int REQUEST_CODE_CAPTURE = 4;
 	//系统图库
-	public static final int REQUSET_CODE_GALLERY = 5;
+	public static final int REQUEST_CODE_GALLERY = 5;
+	//裁剪
+	public static final int REQUEST_CODE_CROP = 6;
 }
